@@ -17,6 +17,8 @@ with open("input.csv", "r", encoding="utf8") as ins:
         row[0] = row[0].strip()
         row[1] = row[1].strip()
         row[2] = row[2].strip()
+        if not row[0] and not row[1] and not row[2] and not row[3]:
+            continue
         # remove BOM
         if row[0].startswith(u'\ufeff'):
             row[0] = row[0][1:]
