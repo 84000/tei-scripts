@@ -4,11 +4,11 @@ import csv
 
 glossname = "UT22084-061-014-"
 
-outfile = open('output.xml', 'w')
+outfile = open('output.xml', 'w', encoding="utf8")
 
 outfile.write("""<?xml version="1.0" encoding="UTF-8"?>\n""")
 
-with open("input.csv", "r") as ins:
+with open("input.csv", "r", encoding="utf8") as ins:
     glosscsvreader = csv.reader(ins, delimiter=',', quotechar='"')
     glossidx = 0
     glossletters = 'init'
@@ -17,6 +17,9 @@ with open("input.csv", "r") as ins:
         row[0] = row[0].strip()
         row[1] = row[1].strip()
         row[2] = row[2].strip()
+        # remove BOM
+        if row[0].startswith(u'\ufeff'):
+            row[0] = row[0][1:]
         if row[0] == 'Tibetan':
             glossidx = 0
             if (glossletters == 'init'):
