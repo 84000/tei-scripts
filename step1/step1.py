@@ -55,6 +55,12 @@ def write_header(header_lines):
 				splitted = line.split(',',1)
 				args['version'] = splitted[0].strip()
 				args['date'] = splitted[1].strip()
+			elif arg == 'author':
+				splitted = line.split('<lb/>',1)
+				line = splitted[0]
+				splitted = line.split('by',1)
+				line = splitted[1].strip()
+				args['translatorMain'] = line
 			else:
 				args[arg] = line
 	for k, v in args.items():
@@ -86,6 +92,7 @@ with open("input.xml", "r", encoding="utf8") as ins:
 				unfinished_line = True
 		elif after_header:
 			line = line.replace('&lt;', '<').replace('&gt;', '>')
+			line = re.sub(r'\sxml:space="[^"]*"', '', line)
 			outfile.write(line)
 
 outfile.close()
