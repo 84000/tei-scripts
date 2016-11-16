@@ -1,0 +1,48 @@
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="mainTitle" xml:lang="bo">__title_bo__</title>
+                <title type="mainTitle" xml:lang="eng">__title_en__</title>
+                <title type="mainTitle" xml:lang="Sa-Ltn">__title_sk__</title>
+                <title type="longTitle" xml:lang="bo">__longtitle_bo__</title>
+                <title type="longTitle" xml:lang="Bo-Ltn">__longtitle_bo_ltn__</title>
+                <title type="longTitle" xml:lang="eng">__longtitle_en__</title>
+                <title type="longTitle" xml:lang="Sa-Ltn">__longtitle_sk__</title>
+                <author role="translatorMain">__translatorMain__</author>
+            </titleStmt>
+            <editionStmt>
+                <edition>__version__ <date>__date__</date>
+                </edition>
+            </editionStmt>
+            <publicationStmt>
+                <publisher>
+                    <name>84000: Translating the Words of the Buddha</name> is a global non-profit
+                    initiative that aims to translate all of the Buddha’s words into modern
+                    languages, and to make them available to everyone.</publisher>
+                <availability>
+                    <licence>
+                        <graphic url="http://i.creativecommons.org/l/by-nc-nd/2.0/88x31.png"/>
+                        <lb/>
+                        <p>This work is provided under the protection of a Creative Commons CC
+                            BY-NC-ND (Attribution - Non-commercial - No-derivatives) 3.0 copyright.
+                            It may be copied or printed for fair use, but only with full
+                            attribution, and not for commercial advantage or personal compensation.
+                            For full details, see the Creative Commons license.</p>
+                    </licence>
+                </availability>
+                <idno xml:id="__id__"/>
+                <date>__date__</date>
+            </publicationStmt>
+            <sourceDesc>
+                <bibl>
+                    <ref>__ref__</ref>
+                    <biblScope>__biblScope__</biblScope>
+                    <author role="translatorTib">XXX</author>
+                    <author role="translatorTib">XXX</author>
+                    <author role="translatorTib">XXX</author>
+                </bibl>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
