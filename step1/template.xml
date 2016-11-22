@@ -1,3 +1,4 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
     <teiHeader>
         <fileDesc>
             <titleStmt>
@@ -45,4 +46,44 @@
         </fileDesc>
     </teiHeader>
     <text>
+        <front>
+            <div type="summary">
+                <head type="summary">Summary</head>
+                <milestone unit="chunk"/>
+                __summary__
+            </div>
+            <div type="acknowledgment">
+                <head type="acknowledgment">Acknowledgments</head>
+                <milestone unit="chunk"/>
+                __acknowledgments__
+            </div>
+            <div type="introduction">
+                <head type="introduction">Introduction</head>
+                <div type="section">
+                    <milestone unit="chunk"/>
+                    __introduction__
+                </div>
+            </div>
+        </front>
         <body>
+            <div type="translation">
+                <head type="translation">THE TRANSLATION</head>
+                __body__
+            </div>
+        </body>
+        <back>
+            <div type="notes">
+                <head type="notes">Notes</head>
+            </div>
+            <div type="listBibl">
+                <head type="listBibl">Bibliography</head>
+                <div type="section">
+                    __bibliography__
+                </div>
+            </div>
+            <div type="glossary">
+                __glossary__
+            </div>
+        </back>
+    </text>
+</TEI>

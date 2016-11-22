@@ -4,8 +4,6 @@ import re
 
 outfile = open('output.xml', 'w', encoding="utf8")
 
-outfile.write("""<?xml-model href="../../../schema/84000-ODD.rnc" type="application/relax-ng-compact-syntax"?>\n<TEI xmlns="http://www.tei-c.org/ns/1.0">\n""")
-
 lineNums = {
 	1: 'title_bo',
 	2: 'title_en',
@@ -19,25 +17,31 @@ lineNums = {
 	10: 'version_date'
 }
 
-def write_header(header_lines):
-	with open("template.xml", "r", encoding="utf8") as inf:
-		template = inf.read()
+args = {
+	'title_bo': 'XXX',
+	'title_en': 'XXX',
+	'title_sk': 'XXX',
+	'longtitle_bo': 'XXX',
+	'longtitle_bo_ltn': 'XXX',
+	'longtitle_en': 'XXX',
+	'longtitle_sk': 'XXX',
+	'translatorMain': 'XXX',
+	'version': 'XXX',
+	'date': 'XXX',
+	'id': 'XXX',
+	'ref': 'XXX',
+	'biblScope': 'XXX',
+	'summary': '',
+	'acknowledgments': '',
+	'introduction': '',
+	'body': '',
+	'bibliography': '',
+	'glossary': 'XXX'
+}
+
+def fill_header_args(header_lines):
+	global args
 	linenum = 0
-	args = {
-		'title_bo': 'XXX',
-		'title_en': 'XXX',
-		'title_sk': 'XXX',
-		'longtitle_bo': 'XXX',
-		'longtitle_bo_ltn': 'XXX',
-		'longtitle_en': 'XXX',
-		'longtitle_sk': 'XXX',
-		'translatorMain': 'XXX',
-		'version': 'XXX',
-		'date': 'XXX',
-		'id': 'XXX',
-		'ref': 'XXX',
-		'biblScope': 'XXX'
-	}
 	for line in header_lines:
 		line = re.sub(r'<(?:\/)*(hi|pb|p)([^>]*)(?:\/)*>', '', line)
 		line = re.sub(r'\s*\n\s*', ' ', line)
@@ -63,25 +67,28 @@ def write_header(header_lines):
 				args['translatorMain'] = line
 			else:
 				args[arg] = line
-	for k, v in args.items():
-		template = template.replace('__'+k+'__', v)
-	outfile.write(template)
 
 with open("input.xml", "r", encoding="utf8") as ins:
 	header_lines = []
-	in_header = False
-	after_header = False
+	step = 'init'
+	substep = 'body'
 	unfinished_line = False
 	for line in ins:
+		line = line.replace('&lt;', '<').replace('&gt;', '>')
+		line = re.sub(r'\[F\. ([^\]]+)\]', r'<ref cRef="\1"/>', line)
+		line = line.replace('<p><milestone unit="chunk"/>', '<milestone unit="chunk"/>\n                    <p>')
+		line = line.replace('<hi rend="endnote_reference"><note place="end"><p rend="endnote text">','<note place="end">')
+		line = line.replace('</p></note></hi>','</note>')
+		line = re.sub(r'\sxml:space="[^"]*"', '', line)
 		stripped_line = line.strip()
 		if stripped_line == '<body>':
-			in_header = True
+			step = 'header'
 			continue
 		elif stripped_line == '<p>Contents</p>':
-			in_header = False
-			after_header = True
-			write_header(header_lines)
-		if in_header:
+			step = 'toc'
+			fill_header_args(header_lines)
+			header_lines = None
+		if step == 'header':
 			if unfinished_line:
 				header_lines[-1] = header_lines[-1]+line
 			else:
@@ -90,9 +97,29 @@ with open("input.xml", "r", encoding="utf8") as ins:
 				unfinished_line = False
 			else:
 				unfinished_line = True
-		elif after_header:
-			line = line.replace('&lt;', '<').replace('&gt;', '>')
-			line = re.sub(r'\sxml:space="[^"]*"', '', line)
-			outfile.write(line)
+		elif step == 'toc':
+			if stripped_line == '<p><pb/></p>':
+				step = 'aftertoc'
+		elif step == 'aftertoc':
+			no_tag_line = stripped_line.replace('<p>', '').replace('</p>', '').replace('<pb/>', '').strip()
+			if no_tag_line == 'Summary':
+				substep = 'summary'
+			elif no_tag_line == 'Acknowledgments':
+				substep = 'acknowledgments'
+			elif no_tag_line == 'Introduction':
+				substep = 'introduction'
+			elif no_tag_line == '<hi rend="allcaps">The Translation</hi>':
+				substep = 'body'
+			elif no_tag_line == 'Bibliography':
+				substep = 'bibliography'
+			elif no_tag_line == '</body>':
+				step = 'ignore'
+			else:
+				args[substep] = args[substep]+line
+	with open("template.xml", "r", encoding="utf8") as inf:
+		template = inf.read()
+	for k, v in args.items():
+		template = template.replace('__'+k+'__', v)
+	outfile.write(template)
 
 outfile.close()
