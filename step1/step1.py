@@ -30,6 +30,7 @@ args = {
 	'date': 'XXX',
 	'id': 'XXX',
 	'ref': 'XXX',
+	'toc': '',
 	'biblScope': 'XXX',
 	'summary': '',
 	'acknowledgments': '',
@@ -73,6 +74,7 @@ with open("input.xml", "r", encoding="utf8") as ins:
 	step = 'init'
 	substep = 'body'
 	unfinished_line = False
+	translation_line_pattern = re.compile('^<hi[^>]*>The Translation</hi>$')
 	for line in ins:
 		line = line.replace('&lt;', '<').replace('&gt;', '>')
 		line = re.sub(r'\[F\. ([^\]]+)\]', r'<ref cRef="\1"/>', line)
@@ -100,6 +102,8 @@ with open("input.xml", "r", encoding="utf8") as ins:
 		elif step == 'toc':
 			if stripped_line == '<p><pb/></p>':
 				step = 'aftertoc'
+			else:
+				args['toc'] += line
 		elif step == 'aftertoc':
 			no_tag_line = stripped_line.replace('<p>', '').replace('</p>', '').replace('<pb/>', '').strip()
 			if no_tag_line == 'Summary':
@@ -108,17 +112,21 @@ with open("input.xml", "r", encoding="utf8") as ins:
 				substep = 'acknowledgments'
 			elif no_tag_line == 'Introduction':
 				substep = 'introduction'
-			elif no_tag_line == '<hi rend="allcaps">The Translation</hi>':
+			elif translation_line_pattern.match(no_tag_line):
 				substep = 'body'
 			elif no_tag_line == 'Bibliography':
 				substep = 'bibliography'
 			elif no_tag_line == '</body>':
 				step = 'ignore'
 			else:
+				if substep == 'bibliography':
+					line = line.replace('<p>','<bibl>').replace('</p>','</bibl>')
 				args[substep] = args[substep]+line
 	with open("template.xml", "r", encoding="utf8") as inf:
 		template = inf.read()
 	for k, v in args.items():
+		v = re.sub(r'<\s*\n*\s*hi\s*\n*\s*rend="endnote_reference"\s*\n*\s*>\s*\n*\s*<note\s*\n*\s*place="end"\s*\n*\s*>\s*\n*\s*<p\s*\n*\s*rend="(end|foot)note text"\s*\n*\s*>', '<note place="end">', v)
+		v = v.replace('<p><pb/></p>', '')
 		template = template.replace('__'+k+'__', v)
 	outfile.write(template)
 

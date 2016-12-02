@@ -45,6 +45,9 @@
             </sourceDesc>
         </fileDesc>
     </teiHeader>
+    <!--
+        __toc__
+    -->
     <text>
         <front>
             <div type="summary">
@@ -68,7 +71,12 @@
         <body>
             <div type="translation">
                 <head type="translation">THE TRANSLATION</head>
+				<head type="titleHon">XXX</head>
+				<head type="titleMain">__title_en__</head>
+				<div type="section">
+                    <milestone unit="chunk"/>
                 __body__
+				</div>
             </div>
         </body>
         <back>
