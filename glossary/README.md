@@ -1,14 +1,16 @@
 # Glossary conversion
 
-This script is used to convert an Excel glossary into xml.
+This script are used to convert an Excel glossary into xml.
 
 # Dependencies
 
-The script is written in Python3, but does not need any module. The different variables are hardcoded so that it can run directly from the Windows Explorer, without the need for command-line arguments.
+The scripts are written in Python3, but does not need any module. The different variables are hardcoded so that it can run directly from the Windows Explorer, without the need for command-line arguments.
 
 # Use
 
 These instructions are for non-Python-savvy users, Unix and Python savvy will see more direct and simple methods
+
+## Conversion from csv format
 
 #### CSV conversion
 
@@ -24,8 +26,16 @@ Several methods are possible, here is the one using [LibreOffice](https://www.li
  
  #### Script use
 
-  * copy the `convert-glossary.py` file in the same folder as the `input.csv` file
+  * copy the `convert-glossary-from-csv.py` file in the same folder as the `input.csv` file
   * change the `glossname` variable to fit the ID of the glossary you're working on
   * run the script (double clicking it)
  
 This will produce an `output.xml` file with the final TEI markup.
+
+## Conversion from TEI
+
+First convert your excel file to TEI (method to be documented), then:
+
+ * rename you TEI file `input.xml`
+ * run `convert-glossary-from-tei.py` in the same folder
+ * enjoy you `output.xml`

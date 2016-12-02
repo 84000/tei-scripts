@@ -47,7 +47,7 @@ with open("input.csv", "r", encoding="utf8") as ins:
             res += "\n            <term type=\"definition\">%s</term>" % definition
         if 4 in row and row[4]:
             if 5 in row and row[5]:
-                row[4] += ', '+row[4]
+                row[4] += ', '+row[5]
             res += "\n            <term type=\"alternative\" xml:lang=\"eng\">%s</term>" % row[4]
         res += "\n        </gloss>\n    </item>\n"
         outfile.write(res)
